@@ -25,6 +25,13 @@ export const constantRoutes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: "/",
+    component: () => import("@/pages/demo/docs/index.vue"),
+    meta: {
+      hidden: true
+    }
+  },
+  {
     path: "/403",
     component: () => import("@/pages/error/403.vue"),
     meta: {
