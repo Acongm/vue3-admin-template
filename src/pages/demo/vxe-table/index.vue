@@ -3,6 +3,10 @@ import type { TableResponseData } from "@@/apis/tables/type"
 import type { ElMessageBoxOptions } from "element-plus"
 import type { VxeFormInstance, VxeFormProps, VxeGridInstance, VxeGridProps, VxeModalInstance, VxeModalProps } from "vxe-table"
 import { deleteTableDataApi, getTableDataApi } from "@@/apis/tables"
+import { saveAs } from "file-saver"
+import { asBlob } from "html-docx-js-typescript"
+// #endregion
+
 import { RoleColumnSlots } from "./tsx/RoleColumnSlots"
 import { StatusColumnSlots } from "./tsx/StatusColumnSlots"
 
@@ -190,7 +194,20 @@ const xModalOpt: VxeModalProps = reactive({
     return Promise.resolve()
   }
 })
-// #endregion
+
+const pageViewRef = ref()
+function exportToDocx() {
+  const content = pageViewRef.value.innerHTML
+  const htmlString = `
+    <!DOCTYPE html>
+    <html>
+      <body>${content}</body>
+    </html>
+  `
+  asBlob(htmlString).then((blob: any) => {
+    saveAs(blob, "document.docx")
+  })
+}
 
 // #region vxe-form
 const xFormDom = ref<VxeFormInstance>()
@@ -375,19 +392,14 @@ const crudStore = reactive({
     }
   },
   /** 更多自定义方法 */
-  moreFn: () => {}
+  moreFn: () => { }
 })
 // #endregion
 </script>
 
 <template>
-  <div class="app-container">
-    <el-alert
-      title="数据来源"
-      type="success"
-      description="由 Apifox 提供在线 Mock，数据不具备真实性，仅供简单的 CRUD 操作演示。"
-      show-icon
-    />
+  <div class="app-container" ref="pageViewRef">
+    <el-alert title="数据来源" type="success" description="由 Apifox 提供在线 Mock，数据不具备真实性，仅供简单的 CRUD 操作演示。" show-icon />
     <!-- 表格 -->
     <vxe-grid ref="xGridDom" v-bind="xGridOpt">
       <!-- 左侧按钮列表 -->
@@ -397,6 +409,9 @@ const crudStore = reactive({
         </vxe-button>
         <vxe-button status="danger" icon="vxe-icon-delete">
           批量删除
+        </vxe-button>
+        <vxe-button icon="vxe-icon-docs" @click="exportToDocx()">
+          导出docs
         </vxe-button>
       </template>
       <!-- 操作 -->

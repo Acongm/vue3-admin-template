@@ -24,13 +24,13 @@ const loginFormRef = ref<FormInstance | null>(null)
 const loading = ref(false)
 
 /** 验证码图片 URL */
-const codeUrl = ref("")
+const codeUrl = ref("v3admin")
 
 /** 登录表单数据 */
 const loginFormData: LoginRequestData = reactive({
   username: "admin",
   password: "12345678",
-  code: ""
+  code: "v3admin"
 })
 
 /** 登录表单校验规则 */
@@ -70,9 +70,9 @@ function handleLogin() {
 /** 创建验证码 */
 function createCode() {
   // 清空已输入的验证码
-  loginFormData.code = ""
+  loginFormData.code = "v3admin"
   // 清空验证图片
-  codeUrl.value = ""
+  codeUrl.value = "v3admin"
   // 获取验证码图片
   getCaptchaApi().then((res) => {
     codeUrl.value = res.data
