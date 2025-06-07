@@ -100,6 +100,15 @@ export const constantRoutes: RouteRecordRaw[] = [
         }
       },
       {
+        path: "docxtemplater",
+        component: () => import("@/pages/demo/docxtemplater/index.vue"),
+        name: "Docxtemplater",
+        meta: {
+          title: "docxtemplater",
+          keepAlive: true
+        }
+      },
+      {
         path: "level2",
         component: () => import("@/pages/demo/level2/index.vue"),
         redirect: "/demo/level2/level3",
